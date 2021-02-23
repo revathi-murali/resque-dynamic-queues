@@ -8,3 +8,4 @@ require 'resque/plugins/dynamic_queues/queues'
 #end
 Resque.send(:extend, Resque::Plugins::DynamicQueues::Attributes)
 Resque::Worker.send(:include, Resque::Plugins::DynamicQueues::Queues)
+Resque::Worker.send(:include, Resque::Plugins::DynamicQueues::Attributes)

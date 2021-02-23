@@ -21,7 +21,7 @@ module Resque
 
           return queues_without_dynamic if queue_names.grep(/(^!)|(^@)|(\*)/).size == 0
 
-          real_queues = Resque.queues
+          real_queues =  Array(redis.smembers(:queues)) # Here `redis` refers to the Resque::Worker's redis
           matched_queues = []
 
           while q = queue_names.shift
@@ -31,7 +31,7 @@ module Resque
               key = $2.strip
               key = hostname if key.size == 0
 
-              add_queues = Resque.get_dynamic_queue(key)
+              add_queues = get_dynamic_queue(key)
               add_queues.map! { |q| q.gsub!(/^!/, '') || q.gsub!(/^/, '!') } if $1
 
               queue_names.concat(add_queues)
